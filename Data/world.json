@@ -1,0 +1,20 @@
+[
+  {
+    "Id": "tavern",
+    "Name": "Taverna do Javali",
+    "Description": "O ar cheira a cerveja velha e fumaça.",
+    "Exits": ["street"]
+  },
+  {
+    "Id": "street",
+    "Name": "Rua Principal",
+    "Description": "Uma rua de paralelepípedos escura e fria.",
+    "Exits": ["tavern", "alley"]
+  },
+  {
+    "Id": "alley",
+    "Name": "Beco Escuro",
+    "Description": "Você mal consegue ver um palmo à frente. Cheira a perigo.",
+    "Exits": ["street"]
+  }
+]

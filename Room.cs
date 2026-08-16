@@ -1,30 +1,23 @@
 namespace BaldursNet;
 
-public class Room
+public class Room(string name, string description)
 {
-  public string Name { get; private set; }
-  public string Description { get; private set; }
-  public List<Room> _exits { get; }
-
-  public Room(string name, string description)
-  {
-    Name = name;
-    Description = description;
-    _exits = [];
-  }
+  public string Name { get; private set; } = name;
+  public string Description { get; private set; } = description;
+  public List<Room> Exits { get; } = [];
 
   public void AddExit(Room room)
   {
-    _exits.Add(room);
+    Exits.Add(room);
   }
 
   public Room GetExit(int index)
   {
-    return _exits[index];
+    return Exits[index];
   }
 
   public List<Room> GetAvailableExits()
   {
-    return _exits;
+    return Exits;
   }
 }

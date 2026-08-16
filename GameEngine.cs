@@ -6,36 +6,20 @@ public class GameEngine
 {
   private GameState _currentState;
   private Room _currentRoom;
-  private IUserInterface _userInterface;
+  private readonly IUserInterface UserInterface;
+  private readonly IWorldLoader WorldLoader;
 
-  public GameEngine(IUserInterface userInterface)
+  public GameEngine(IUserInterface userInterface, IWorldLoader worldLoader)
   {
-    _userInterface = userInterface;
-    _currentRoom = InitWorld();
+    UserInterface = userInterface;
+    WorldLoader = worldLoader;
+    _currentRoom = WorldLoader.GetStartingRoom("tavern");
   }
 
   public void Start()
   {
-    InitWorld();
     _currentState = GameState.MainMenu;
     RunLoop();
-  }
-
-  // MÉTODO TEMPORÁRIO. LOGO SERÁ REFATORADO
-  private Room InitWorld()
-  {
-    var tavern = new Room("Taverna do Javali", "O ar cheira a cerveja velha e fumaça.");
-    var street = new Room("Rua Principal", "Uma rua de paralelepípedos escura.");
-    var alley = new Room("Beco Escuro", "Você mal consegue ver um palmo à frente.");
-
-    tavern.AddExit(street);
-
-    street.AddExit(tavern);
-    street.AddExit(alley);
-
-    alley.AddExit(street);
-
-    return tavern;
   }
 
   private void RunLoop()
@@ -45,10 +29,10 @@ public class GameEngine
       switch (_currentState)
       {
         case GameState.MainMenu:
-          _currentState = _userInterface.HandleMainMenu();
+          _currentState = UserInterface.HandleMainMenu();
           break;
         case GameState.Playing:
-          var (nextState, nextRoom) = _userInterface.HandleExploration(_currentRoom);
+          var (nextState, nextRoom) = UserInterface.HandleExploration(_currentRoom);
           _currentState = nextState;
           if (nextRoom != null)
           {
@@ -56,10 +40,10 @@ public class GameEngine
           }
           break;
         case GameState.OptionsMenu:
-          _currentState = _userInterface.HandleOptionsMenu();
+          _currentState = UserInterface.HandleOptionsMenu();
           break;
         case GameState.LoadMenu:
-          _currentState = _userInterface.HandleLoadMenu();
+          _currentState = UserInterface.HandleLoadMenu();
           break;
       }
     }
