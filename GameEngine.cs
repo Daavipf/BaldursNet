@@ -5,12 +5,13 @@ namespace BaldursNet;
 public class GameEngine
 {
   private GameState _currentState;
-  private Room? _currentRoom;
-  private IConsoleMenu _consoleMenu;
+  private Room _currentRoom;
+  private IUserInterface _userInterface;
 
-  public GameEngine(IConsoleMenu consoleMenu)
+  public GameEngine(IUserInterface userInterface)
   {
-    _consoleMenu = consoleMenu;
+    _userInterface = userInterface;
+    _currentRoom = InitWorld();
   }
 
   public void Start()
@@ -20,7 +21,8 @@ public class GameEngine
     RunLoop();
   }
 
-  private void InitWorld()
+  // MÉTODO TEMPORÁRIO. LOGO SERÁ REFATORADO
+  private Room InitWorld()
   {
     var tavern = new Room("Taverna do Javali", "O ar cheira a cerveja velha e fumaça.");
     var street = new Room("Rua Principal", "Uma rua de paralelepípedos escura.");
@@ -33,7 +35,7 @@ public class GameEngine
 
     alley.AddExit(street);
 
-    _currentRoom = tavern;
+    return tavern;
   }
 
   private void RunLoop()
@@ -43,69 +45,23 @@ public class GameEngine
       switch (_currentState)
       {
         case GameState.MainMenu:
-          HandleMenu();
+          _currentState = _userInterface.HandleMainMenu();
           break;
         case GameState.Playing:
-          HandleExploration();
+          var (nextState, nextRoom) = _userInterface.HandleExploration(_currentRoom);
+          _currentState = nextState;
+          if (nextRoom != null)
+          {
+            _currentRoom = nextRoom;
+          }
           break;
         case GameState.OptionsMenu:
-          _consoleMenu.ShowMessage("Em Desenolvimento...");
+          _currentState = _userInterface.HandleOptionsMenu();
           break;
         case GameState.LoadMenu:
-          _consoleMenu.ShowMessage("Em Desenolvimento...");
+          _currentState = _userInterface.HandleLoadMenu();
           break;
       }
     }
-  }
-
-  private void HandleMenu()
-  {
-    List<(string Label, GameState State)> options = [
-      ("Iniciar Jogo", GameState.Playing),
-      ("Carregar Save", GameState.LoadMenu),
-      ("Opções", GameState.OptionsMenu),
-      ("Sair", GameState.Exit)
-    ];
-
-    ConsoleMenuParams<(string Label, GameState State)> menuParams = new(
-      items: options,
-      title: "BALDUR'S NET 10.0 ",
-      canCancel: false,
-      displaySelector: opt => opt.Label);
-
-    int selectedOption = _consoleMenu.RenderSelectibleMenu(menuParams);
-
-    if (selectedOption >= 0 && selectedOption < options.Count)
-    {
-      _currentState = options[selectedOption].State;
-    }
-  }
-
-  private void HandleExploration()
-  {
-    var exits = _currentRoom.GetAvailableExits();
-
-    if (exits.Count == 0)
-    {
-      _consoleMenu.ShowMessage("Não há saídas nesta sala.");
-    }
-
-    ConsoleMenuParams<Room> menuParams = new(
-      items: exits,
-      title: _currentRoom.Name,
-      description: _currentRoom.Description,
-      displaySelector: exit => exit.Name,
-      prompt: "\n[↑/↓] Selecionar  |  [Enter] Entrar  |  [ESC] Voltar"
-    );
-
-    int option = _consoleMenu.RenderSelectibleMenu(menuParams);
-
-    if (option == -1)
-    {
-      _currentState = GameState.MainMenu;
-      return;
-    }
-
-    _currentRoom = exits[option];
   }
 }
