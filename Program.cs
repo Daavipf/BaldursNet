@@ -8,7 +8,7 @@ public class Program
   {
     ISelectionMenu consoleMenu = new SelectionMenu();
     IUserInterface userInterface = new UserInterface(consoleMenu);
-    IWorldLoader worldLoader = new JsonWorldLoader("Data/world.json");
+    IWorldLoader worldLoader = new JsonWorldLoader("world.json");
     var engine = new GameEngine(userInterface, worldLoader);
     engine.Start();
   }
