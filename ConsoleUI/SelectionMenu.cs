@@ -1,9 +1,9 @@
 namespace BaldursNet.ConsoleUI;
 
-public class ConsoleMenu : IConsoleMenu
+public class SelectionMenu : ISelectionMenu
 {
   public int RenderSelectibleMenu<T>(
-    ConsoleMenuParams<T> menuParams)
+    SelectionMenuParams<T> menuParams)
   {
     if (menuParams.Items == null || menuParams.Items.Count == 0)
       return -1;

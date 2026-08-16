@@ -6,7 +6,7 @@ public class Program
 {
   static void Main(string[] args)
   {
-    IConsoleMenu consoleMenu = new ConsoleMenu();
+    ISelectionMenu consoleMenu = new SelectionMenu();
     IUserInterface userInterface = new UserInterface(consoleMenu);
     var engine = new GameEngine(userInterface);
     engine.Start();

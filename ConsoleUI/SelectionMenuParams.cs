@@ -1,6 +1,6 @@
 namespace BaldursNet.ConsoleUI;
 
-public class ConsoleMenuParams<T>(
+public class SelectionMenuParams<T>(
   List<T> items,
   string title,
   string? description = null,

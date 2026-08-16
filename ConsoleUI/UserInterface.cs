@@ -2,9 +2,9 @@ namespace BaldursNet.ConsoleUI;
 
 public class UserInterface : IUserInterface
 {
-  private IConsoleMenu _consoleMenu;
+  private ISelectionMenu _consoleMenu;
 
-  public UserInterface(IConsoleMenu consoleMenu)
+  public UserInterface(ISelectionMenu consoleMenu)
   {
     _consoleMenu = consoleMenu;
   }
@@ -19,7 +19,7 @@ public class UserInterface : IUserInterface
       ("Sair", GameState.Exit)
     ];
 
-    ConsoleMenuParams<(string Label, GameState State)> menuParams = new(
+    SelectionMenuParams<(string Label, GameState State)> menuParams = new(
       items: options,
       title: "BALDUR'S NET 10.0 ",
       canCancel: false,
@@ -44,13 +44,16 @@ public class UserInterface : IUserInterface
       _consoleMenu.ShowMessage("Não há saídas nesta sala.");
     }
 
-    ConsoleMenuParams<Room> menuParams = new(
+    SelectionMenuParams<Room> menuParams = new(
       items: exits,
       title: currentRoom.Name,
       description: currentRoom.Description,
       displaySelector: exit => exit.Name,
       prompt: "\n[↑/↓] Selecionar  |  [Enter] Entrar  |  [ESC] Voltar"
     );
+
+    // QUANDO A SALA TIVER MAIS INFORMAÇÕES/OBJETOS/IMPLEMENTAÇÕES, OS MÉTODOS
+    // DE EXIBIÇÃO SERÃO CHAMADOS AQUI
 
     int option = _consoleMenu.RenderSelectibleMenu(menuParams);
 
