@@ -25,6 +25,7 @@ public class GameEngine(IUserInterface ui, IWorldLoader worldLoader)
   {
     while (CurrentState != null)
     {
+      CurrentState.Render(this);
       CurrentState.Update(this);
     }
   }

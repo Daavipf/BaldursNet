@@ -10,4 +10,10 @@ public class LoadMenuState : IGameState
     engine.UI.ShowMessage("Em desenvolvimento");
     engine.ChangeState(new MainMenuState());
   }
+
+  public void Render(GameEngine engine)
+  {
+    engine.UI.ShowMessage("Em desenvolvimento");
+    engine.ChangeState(new MainMenuState());
+  }
 }

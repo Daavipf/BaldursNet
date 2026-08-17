@@ -6,18 +6,19 @@ namespace BaldursNet.State;
 
 public class MainMenuState : IGameState
 {
+  private int SelectionMenuIndex;
   public void Update(GameEngine engine)
   {
-    List<string> options = ["Iniciar Jogo", "Carregar Jogo", "Opções", "Sair"];
+    /*List<string> options = ["Iniciar Jogo", "Carregar Jogo", "Opções", "Sair"];
     SelectionMenuParams<string> menuParams = new(
       title: "BALDUR'S NET 10.0",
       items: options,
       canCancel: false
     );
 
-    int selectedOption = engine.UI.RenderSelectibleMenu<string>(menuParams);
+    int selectedOption = engine.UI.RenderSelectibleMenu<string>(menuParams);*/
 
-    switch (selectedOption)
+    switch (SelectionMenuIndex)
     {
       case 0:
         engine.ChangeState(new ExplorationState());
@@ -32,5 +33,17 @@ public class MainMenuState : IGameState
         engine.ChangeState(null);
         break;
     }
+  }
+
+  public void Render(GameEngine engine)
+  {
+    List<string> options = ["Iniciar Jogo", "Carregar Jogo", "Opções", "Sair"];
+    SelectionMenuParams<string> menuParams = new(
+      title: "BALDUR'S NET 10.0",
+      items: options,
+      canCancel: false
+    );
+
+    SelectionMenuIndex = engine.UI.RenderScreen<string>(menuParams, null);
   }
 }

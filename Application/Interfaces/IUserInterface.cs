@@ -4,6 +4,8 @@ namespace BaldursNet.Application.Interfaces;
 
 public interface IUserInterface
 {
-  int RenderSelectibleMenu<T>(SelectionMenuParams<T> menuParams);
+  void RenderSelectibleMenu<T>(SelectionMenuParams<T> menuParams, int selectedIndex);
   void ShowMessage(string message);
+  void RenderTabs(List<string> tabs);
+  int RenderScreen<T>(SelectionMenuParams<T> menuParams, List<string>? tabs);
 }
