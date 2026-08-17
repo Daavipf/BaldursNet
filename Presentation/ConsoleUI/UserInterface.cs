@@ -1,80 +1,61 @@
-namespace BaldursNet.ConsoleUI;
+using BaldursNet.Application.Interfaces;
+
+namespace BaldursNet.Presentation.ConsoleUI;
 
 public class UserInterface : IUserInterface
 {
-  private ISelectionMenu _consoleMenu;
-
-  public UserInterface(ISelectionMenu consoleMenu)
+  public int RenderSelectibleMenu<T>(SelectionMenuParams<T> menuParams)
   {
-    _consoleMenu = consoleMenu;
-  }
-  public GameState HandleMainMenu()
-  {
-    GameState state = GameState.MainMenu;
+    if (menuParams.Items == null || menuParams.Items.Count == 0)
+      return -1;
 
-    List<(string Label, GameState State)> options = [
-      ("Iniciar Jogo", GameState.Playing),
-      ("Carregar Save", GameState.LoadMenu),
-      ("Opções", GameState.OptionsMenu),
-      ("Sair", GameState.Exit)
-    ];
+    int selectedIndex = 0;
+    menuParams.DisplaySelector ??= (item => item?.ToString() ?? string.Empty);
 
-    SelectionMenuParams<(string Label, GameState State)> menuParams = new(
-      items: options,
-      title: "BALDUR'S NET 10.0 ",
-      canCancel: false,
-      displaySelector: opt => opt.Label);
-
-    int selectedOption = _consoleMenu.RenderSelectibleMenu(menuParams);
-
-    if (selectedOption >= 0 && selectedOption < options.Count)
+    while (true)
     {
-      state = options[selectedOption].State;
-    }
+      Console.Clear();
+      Console.WriteLine($"=== {menuParams.Title} ===");
+      if (menuParams.Description != null) Console.WriteLine($"{menuParams.Description}");
+      for (int i = 0; i < menuParams.Items.Count; i++)
+      {
+        if (i == selectedIndex)
+        {
+          Console.ForegroundColor = ConsoleColor.Green;
+          Console.WriteLine($" > {menuParams.DisplaySelector(menuParams.Items[i])}");
+          Console.ResetColor();
+        }
+        else
+        {
+          Console.WriteLine($"   {menuParams.DisplaySelector(menuParams.Items[i])}");
+        }
+      }
 
-    return state;
+      Console.WriteLine($"\n{menuParams.Prompt}");
+      var key = Console.ReadKey(intercept: true).Key;
+      if (key == ConsoleKey.UpArrow)
+      {
+        selectedIndex = (selectedIndex == 0) ? menuParams.Items.Count - 1 : selectedIndex - 1;
+      }
+      else if (key == ConsoleKey.DownArrow)
+      {
+        selectedIndex = (selectedIndex == menuParams.Items.Count - 1) ? 0 : selectedIndex + 1;
+      }
+      else if (key == ConsoleKey.Enter)
+      {
+        return selectedIndex;
+      }
+      else if (menuParams.CanCancel && key == ConsoleKey.Escape)
+      {
+        return -1;
+      }
+    }
   }
 
-  public (GameState, Room?) HandleExploration(Room currentRoom)
+  public void ShowMessage(string message)
   {
-    var exits = currentRoom.GetAvailableExits();
-
-    if (exits.Count == 0)
-    {
-      _consoleMenu.ShowMessage("Não há saídas nesta sala.");
-    }
-
-    SelectionMenuParams<Room> menuParams = new(
-      items: exits,
-      title: currentRoom.Name,
-      description: currentRoom.Description,
-      displaySelector: exit => exit.Name,
-      prompt: "\n[↑/↓] Selecionar  |  [Enter] Entrar  |  [ESC] Voltar"
-    );
-
-    // QUANDO A SALA TIVER MAIS INFORMAÇÕES/OBJETOS/IMPLEMENTAÇÕES, OS MÉTODOS
-    // DE EXIBIÇÃO SERÃO CHAMADOS AQUI
-
-    int option = _consoleMenu.RenderSelectibleMenu(menuParams);
-
-    if (option == -1)
-    {
-      return (GameState.MainMenu, null);
-    }
-
-    Room nextRoom = exits[option];
-    return (GameState.Playing, nextRoom);
-  }
-
-  public GameState HandleLoadMenu()
-  {
-    _consoleMenu.ShowMessage("Em Desenolvimento...");
-    return GameState.MainMenu;
-  }
-
-  public GameState HandleOptionsMenu()
-  {
-    _consoleMenu.ShowMessage("Em Desenolvimento...");
-    return GameState.MainMenu;
+    Console.WriteLine(message);
+    Console.ReadKey(true);
+    return;
   }
 }

@@ -1,9 +1,9 @@
-namespace BaldursNet.ConsoleUI;
+using BaldursNet.Presentation.ConsoleUI;
+
+namespace BaldursNet.Application.Interfaces;
 
 public interface IUserInterface
 {
-  GameState HandleMainMenu();
-  (GameState NextState, Room? NextRoom) HandleExploration(Room currentRoom);
-  GameState HandleOptionsMenu();
-  GameState HandleLoadMenu();
+  int RenderSelectibleMenu<T>(SelectionMenuParams<T> menuParams);
+  void ShowMessage(string message);
 }

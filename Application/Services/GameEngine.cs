@@ -1,51 +1,30 @@
-using BaldursNet.ConsoleUI;
+using BaldursNet.Application.Interfaces;
+using BaldursNet.Domain.State;
 
-namespace BaldursNet;
+namespace BaldursNet.Application.Services;
 
-public class GameEngine
+public class GameEngine(IUserInterface ui, IWorldLoader worldLoader)
 {
-  private GameState _currentState;
-  private Room _currentRoom;
-  private readonly IUserInterface UserInterface;
-  private readonly IWorldLoader WorldLoader;
+  private IGameState? CurrentState;
+  public Room CurrentRoom { get; set; } = worldLoader.GetStartingRoom("tavern");
+  public IUserInterface UI { get; } = ui;
 
-  public GameEngine(IUserInterface userInterface, IWorldLoader worldLoader)
+  public void ChangeState(IGameState? newState)
   {
-    UserInterface = userInterface;
-    WorldLoader = worldLoader;
-    _currentRoom = WorldLoader.GetStartingRoom("tavern");
+    CurrentState = newState;
   }
 
   public void Start()
   {
-    _currentState = GameState.MainMenu;
+    ChangeState(new MainMenuState());
     RunLoop();
   }
 
   private void RunLoop()
   {
-    while (_currentState != GameState.Exit)
+    while (CurrentState != null)
     {
-      switch (_currentState)
-      {
-        case GameState.MainMenu:
-          _currentState = UserInterface.HandleMainMenu();
-          break;
-        case GameState.Playing:
-          var (nextState, nextRoom) = UserInterface.HandleExploration(_currentRoom);
-          _currentState = nextState;
-          if (nextRoom != null)
-          {
-            _currentRoom = nextRoom;
-          }
-          break;
-        case GameState.OptionsMenu:
-          _currentState = UserInterface.HandleOptionsMenu();
-          break;
-        case GameState.LoadMenu:
-          _currentState = UserInterface.HandleLoadMenu();
-          break;
-      }
+      CurrentState.Update(this);
     }
   }
 }

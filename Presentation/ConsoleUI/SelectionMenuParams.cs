@@ -1,4 +1,4 @@
-namespace BaldursNet.ConsoleUI;
+namespace BaldursNet.Presentation.ConsoleUI;
 
 public class SelectionMenuParams<T>(
   List<T> items,
