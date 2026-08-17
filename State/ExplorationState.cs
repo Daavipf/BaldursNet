@@ -2,7 +2,7 @@ using BaldursNet.Application.Interfaces;
 using BaldursNet.Application.Services;
 using BaldursNet.Presentation.ConsoleUI;
 
-namespace BaldursNet.Domain.State;
+namespace BaldursNet.State;
 
 public class ExplorationState : IGameState
 {

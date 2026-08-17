@@ -1,11 +1,12 @@
 using BaldursNet.Application.Interfaces;
-using BaldursNet.Domain.State;
+using BaldursNet.State;
 
 namespace BaldursNet.Application.Services;
 
 public class GameEngine(IUserInterface ui, IWorldLoader worldLoader)
 {
   private IGameState? CurrentState;
+  private Stack<IGameState> StateStack = new();
   public Room CurrentRoom { get; set; } = worldLoader.GetStartingRoom("tavern");
   public IUserInterface UI { get; } = ui;
 

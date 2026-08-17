@@ -1,9 +1,9 @@
 using BaldursNet.Application.Interfaces;
 using BaldursNet.Application.Services;
 
-namespace BaldursNet.Domain.State;
+namespace BaldursNet.State;
 
-public class OptionsMenuState : IGameState
+public class LoadMenuState : IGameState
 {
   public void Update(GameEngine engine)
   {
