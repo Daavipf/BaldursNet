@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using BaldursNet.Application.Interfaces;
 using BaldursNet.Application.Services;
 using BaldursNet.Domain.Entities;
@@ -7,39 +10,53 @@ namespace BaldursNet.Presentation.ConsoleUI;
 
 public class ExplorationUI : IUserInterface
 {
-  public int RenderScreen<T>(GameEngine engine)
+  public (string Tab, int Index)? RenderScreen(GameEngine engine)
   {
     var exits = engine.CurrentRoom.GetAvailableExits();
 
-    SelectionMenuParams<Room> menuParams = new(
-      items: exits,
-      title: engine.CurrentRoom.Name,
-      description: engine.CurrentRoom.Description,
-      displaySelector: exit => exit.Name,
-      prompt: "\n[↑/↓] Selecionar  |  [Enter] Entrar  |  [ESC] Voltar"
-    );
+    var tabs = ItemTabs.InitializeTabs(exits, engine.CurrentRoom.Objects);
 
-    if (menuParams.Items == null || menuParams.Items.Count == 0)
-      return -1;
-
+    int currentTabIndex = 0;
     int selectedIndex = 0;
-    menuParams.DisplaySelector ??= (item => item?.ToString() ?? string.Empty);
 
     while (true)
     {
       Console.Clear();
 
-      Console.WriteLine($"=== {menuParams.Title} ===");
-      if (menuParams.Description != null)
-        Console.WriteLine($"{menuParams.Description}");
+      var currentTab = tabs[currentTabIndex];
 
-      SelectibleMenu.ShowMenu(menuParams, selectedIndex);
+      Console.WriteLine($"=== {engine.CurrentRoom.Name} ===");
+      if (!string.IsNullOrEmpty(engine.CurrentRoom.Description))
+        Console.WriteLine($"{engine.CurrentRoom.Description}\n");
 
-      int? selectedOption = CaptureInputKey(menuParams.Items.Count, menuParams.CanCancel, ref selectedIndex);
+      ItemTabs.RenderTabs(tabs, currentTabIndex);
 
-      if (selectedOption.HasValue)
+      if (currentTab.Items.Count == 0)
       {
-        return selectedOption.Value;
+        Console.WriteLine("\n[Vazio]");
+      }
+      else
+      {
+        SelectionMenuParams<object> menuParams = new(
+          items: currentTab.Items,
+          title: currentTab.Title,
+          description: null,
+          displaySelector: currentTab.DisplaySelector,
+          prompt: "\n[←/→] Mudar Aba  |  [↑/↓] Selecionar  |  [Enter] Interagir  |  [ESC] Voltar"
+        );
+
+        SelectibleMenu.ShowMenu(menuParams, selectedIndex);
+      }
+
+      var key = CaptureInputKey(currentTab.Items.Count, ref selectedIndex, ref currentTabIndex, tabs.Count);
+
+      if (key == ConsoleKey.Enter && currentTab.Items.Count > 0)
+      {
+        return (currentTab.Title, selectedIndex);
+      }
+      else if (key == ConsoleKey.Escape)
+      {
+        return null;
       }
     }
   }
@@ -48,36 +65,31 @@ public class ExplorationUI : IUserInterface
   {
     Console.WriteLine(message);
     Console.ReadKey(true);
-    return;
   }
 
-  public void RenderTabs(List<string> tabs)
-  {
-    Console.WriteLine(string.Join(" | ", tabs));
-    Console.WriteLine(new string('-', Console.WindowWidth > 0 ? Console.WindowWidth : 30));
-  }
-
-  private int? CaptureInputKey(int menuParamsItemsCount, bool menuParamsCanCancel, ref int selectedIndex)
+  private ConsoleKey CaptureInputKey(int itemsCount, ref int selectedIndex, ref int tabIndex, int tabsCount)
   {
     var key = Console.ReadKey(intercept: true).Key;
 
-    if (key == ConsoleKey.UpArrow)
+    if (key == ConsoleKey.UpArrow && itemsCount > 0)
     {
-      selectedIndex = (selectedIndex == 0) ? menuParamsItemsCount - 1 : selectedIndex - 1;
+      selectedIndex = (selectedIndex <= 0) ? itemsCount - 1 : selectedIndex - 1;
     }
-    else if (key == ConsoleKey.DownArrow)
+    else if (key == ConsoleKey.DownArrow && itemsCount > 0)
     {
-      selectedIndex = (selectedIndex == menuParamsItemsCount - 1) ? 0 : selectedIndex + 1;
+      selectedIndex = (selectedIndex >= itemsCount - 1) ? 0 : selectedIndex + 1;
     }
-    else if (key == ConsoleKey.Enter)
+    else if (key == ConsoleKey.LeftArrow)
     {
-      return selectedIndex;
+      tabIndex = (tabIndex <= 0) ? tabsCount - 1 : tabIndex - 1;
+      selectedIndex = 0;
     }
-    else if (menuParamsCanCancel && key == ConsoleKey.Escape)
+    else if (key == ConsoleKey.RightArrow)
     {
-      return -1;
+      tabIndex = (tabIndex >= tabsCount - 1) ? 0 : tabIndex + 1;
+      selectedIndex = 0;
     }
 
-    return null;
+    return key;
   }
 }

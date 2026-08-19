@@ -2,47 +2,78 @@ using BaldursNet.Application.Interfaces;
 using BaldursNet.Application.Services;
 using BaldursNet.Domain.Entities;
 using BaldursNet.State.Enums;
+using System.Linq;
 
 namespace BaldursNet.State;
 
 public class ExplorationState : IGameState
 {
   private readonly IUserInterface UI;
-  private int NextRoomIndex;
-  private ExplorationTab CurrentTab;
+  private string SelectedTab;
+  private int SelectedIndex;
 
   public ExplorationState(IUserInterface ui)
   {
     UI = ui;
-    CurrentTab = ExplorationTab.Exits;
+    SelectedTab = "Saídas";
+    SelectedIndex = -1;
   }
 
   public void Update(GameEngine engine)
   {
-    var exits = engine.CurrentRoom.GetAvailableExits();
-
-    if (NextRoomIndex == -1)
+    if (SelectedIndex == -1)
     {
-      // QUANDO TIVER A STATE STACK IMPLEMENTADA, AQUI VIRÁ
-      // O POP DA STACK
+      // QUANDO TIVER A STATE STACK IMPLEMENTADA, AQUI VIRÁ O POP
       engine.ChangeState(new MainMenuState(engine.MainMenuUI));
       return;
     }
 
-    engine.CurrentRoom = exits[NextRoomIndex];
+    switch (SelectedTab)
+    {
+      case "Saídas":
+        var exits = engine.CurrentRoom.GetAvailableExits();
+        engine.CurrentRoom = exits[SelectedIndex];
+        break;
+
+      case "Character":
+        var characters = engine.CurrentRoom.GetGameObjects<Character>();
+        var selectedCharacter = characters[SelectedIndex];
+
+        // Exemplo: engine.ChangeState(new DialogState(selectedCharacter));
+        break;
+
+      case "Container":
+        var containers = engine.CurrentRoom.GetGameObjects<Container>();
+        var selectedContainer = containers[SelectedIndex];
+
+        // Exemplo: engine.ChangeState(new LootState(selectedContainer));
+        break;
+    }
+
+    SelectedIndex = -1;
   }
 
   public void Render(GameEngine engine)
   {
     var exits = engine.CurrentRoom.GetAvailableExits();
 
-    if (exits.Count == 0)
+    if (exits.Count == 0 && (engine.CurrentRoom.Objects == null || engine.CurrentRoom.Objects.Count == 0))
     {
-      UI.ShowMessage("Não há saídas nesta sala.");
+      UI.ShowMessage("Não há nada para fazer ou saídas nesta sala.");
       engine.ChangeState(new MainMenuState(engine.MainMenuUI));
       return;
     }
 
-    NextRoomIndex = UI.RenderScreen<Room>(engine);
+    var result = UI.RenderScreen(engine);
+
+    if (result == null)
+    {
+      SelectedIndex = -1;
+    }
+    else
+    {
+      SelectedTab = result.Value.Tab!;
+      SelectedIndex = result.Value.Index;
+    }
   }
 }

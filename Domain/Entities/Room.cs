@@ -22,6 +22,11 @@ public class Room(string name, string description)
     return Exits;
   }
 
+  public List<T> GetGameObjects<T>()
+  {
+    return [.. Objects.OfType<T>()];
+  }
+
   public void AddObject(GameObject obj)
   {
     Objects.Add(obj);

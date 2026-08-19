@@ -33,6 +33,7 @@ public class MainMenuState : IGameState
 
   public void Render(GameEngine engine)
   {
-    SelectionMenuIndex = UI.RenderScreen<string>(engine);
+    var result = UI.RenderScreen(engine);
+    SelectionMenuIndex = result!.Value.Index;
   }
 }

@@ -6,7 +6,7 @@ namespace BaldursNet.Presentation.ConsoleUI;
 
 public class MainMenuUI : IUserInterface
 {
-  public int RenderScreen<T>(GameEngine engine)
+  public (string? Tab, int Index)? RenderScreen(GameEngine engine)
   {
     List<string> items = ["Iniciar Jogo", "Carregar Jogo", "Opções", "Sair"];
     SelectionMenuParams<string> menuParams = new(
@@ -16,7 +16,7 @@ public class MainMenuUI : IUserInterface
     );
 
     if (menuParams.Items == null || menuParams.Items.Count == 0)
-      return -1;
+      return (null, -1);
 
     int selectedIndex = 0;
     menuParams.DisplaySelector ??= (item => item?.ToString() ?? string.Empty);
@@ -27,13 +27,13 @@ public class MainMenuUI : IUserInterface
 
       Console.WriteLine($"=== {menuParams.Title} ===");
 
-      SelectibleMenu.ShowMenu<string>(menuParams, selectedIndex);
+      SelectibleMenu.ShowMenu(menuParams, selectedIndex);
 
       int? selectedOption = CaptureInputKey(menuParams.Items.Count, menuParams.CanCancel, ref selectedIndex);
 
       if (selectedOption.HasValue)
       {
-        return selectedOption.Value;
+        return (null, selectedOption.Value);
       }
     }
   }

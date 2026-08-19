@@ -11,12 +11,12 @@ public static class SelectibleMenu
       if (i == selectedIndex)
       {
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($" > {menuParams.DisplaySelector(menuParams.Items[i])}");
+        Console.WriteLine($" > {menuParams.DisplaySelector!(menuParams.Items[i])}");
         Console.ResetColor();
       }
       else
       {
-        Console.WriteLine($"   {menuParams.DisplaySelector(menuParams.Items[i])}");
+        Console.WriteLine($"   {menuParams.DisplaySelector!(menuParams.Items[i])}");
       }
     }
 
