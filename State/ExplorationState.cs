@@ -1,5 +1,6 @@
 using BaldursNet.Application.Interfaces;
 using BaldursNet.Application.Services;
+using BaldursNet.Domain.Entities;
 using BaldursNet.Presentation.ConsoleUI;
 using BaldursNet.State.Enums;
 
@@ -14,25 +15,10 @@ public class ExplorationState : IGameState
   {
     var exits = engine.CurrentRoom.GetAvailableExits();
 
-    /*if (exits.Count == 0)
-    {
-      engine.UI.ShowMessage("Não há saídas nesta sala.");
-      engine.ChangeState(new MainMenuState());
-      return;
-    }
-
-    SelectionMenuParams<Room> menuParams = new(
-      items: exits,
-      title: engine.CurrentRoom.Name,
-      description: engine.CurrentRoom.Description,
-      displaySelector: exit => exit.Name,
-      prompt: "\n[↑/↓] Selecionar  |  [Enter] Entrar  |  [ESC] Voltar"
-    );
-
-    int selectedOption = engine.UI.RenderSelectibleMenu<Room>(menuParams);*/
-
     if (SelectionMenuIndex == -1)
     {
+      // QUANDO TIVER A STATE STACK IMPLEMENTADA, AQUI VIRÁ
+      // O POP DA STACK
       engine.ChangeState(new MainMenuState());
       return;
     }

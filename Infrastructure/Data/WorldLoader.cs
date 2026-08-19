@@ -2,12 +2,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using BaldursNet.Application.Dtos;
+using BaldursNet.Application.Interfaces;
+using BaldursNet.Domain.Entities;
 
 namespace BaldursNet;
 
-public class JsonWorldLoader(string filePath) : IWorldLoader
+public class JsonWorldLoader(string filePath, IRoomFactory roomFactory) : IWorldLoader
 {
   private readonly string FilePath = filePath;
+  private readonly IRoomFactory RoomFactory = roomFactory;
 
   public Room GetStartingRoom(string startingRoomId)
   {
@@ -37,7 +41,8 @@ public class JsonWorldLoader(string filePath) : IWorldLoader
 
     string json = File.ReadAllText(filePath);
 
-    var roomDtos = JsonSerializer.Deserialize<List<RoomDto>>(json);
+    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    var roomDtos = JsonSerializer.Deserialize<List<RoomDto>>(json, options);
 
     if (roomDtos == null || roomDtos.Count == 0)
       throw new InvalidDataException("O arquivo de mapa está vazio ou inválido.");
@@ -50,7 +55,7 @@ public class JsonWorldLoader(string filePath) : IWorldLoader
     var domainRooms = new Dictionary<string, Room>();
     foreach (var dto in roomDtos)
     {
-      domainRooms[dto.Id] = new Room(dto.Name, dto.Description);
+      domainRooms[dto.Id] = RoomFactory.CreateRoom(dto);
     }
 
     return domainRooms;

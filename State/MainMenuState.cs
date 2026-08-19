@@ -9,15 +9,6 @@ public class MainMenuState : IGameState
   private int SelectionMenuIndex;
   public void Update(GameEngine engine)
   {
-    /*List<string> options = ["Iniciar Jogo", "Carregar Jogo", "Opções", "Sair"];
-    SelectionMenuParams<string> menuParams = new(
-      title: "BALDUR'S NET 10.0",
-      items: options,
-      canCancel: false
-    );
-
-    int selectedOption = engine.UI.RenderSelectibleMenu<string>(menuParams);*/
-
     switch (SelectionMenuIndex)
     {
       case 0:

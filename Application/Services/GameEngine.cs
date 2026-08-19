@@ -1,4 +1,5 @@
 using BaldursNet.Application.Interfaces;
+using BaldursNet.Domain.Entities;
 using BaldursNet.State;
 
 namespace BaldursNet.Application.Services;

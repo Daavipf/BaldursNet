@@ -1,3 +1,5 @@
+using BaldursNet.Application.Dtos;
+using BaldursNet.Domain.Entities;
 using BaldursNet.State.Enums;
 
 namespace BaldursNet.Presentation.ConsoleUI;
