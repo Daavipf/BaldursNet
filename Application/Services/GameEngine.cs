@@ -1,15 +1,17 @@
 using BaldursNet.Application.Interfaces;
 using BaldursNet.Domain.Entities;
+using BaldursNet.Presentation.ConsoleUI;
 using BaldursNet.State;
 
 namespace BaldursNet.Application.Services;
 
-public class GameEngine(IUserInterface ui, IWorldLoader worldLoader)
+public class GameEngine(IWorldLoader worldLoader) : IGameEngine
 {
   private IGameState? CurrentState;
   private Stack<IGameState> StateStack = new();
   public Room CurrentRoom { get; set; } = worldLoader.GetStartingRoom("tavern");
-  public IUserInterface UI { get; } = ui;
+  public IUserInterface MainMenuUI = new MainMenuUI();
+  public IUserInterface ExplorationUI = new ExplorationUI();
 
   public void ChangeState(IGameState? newState)
   {
@@ -18,7 +20,7 @@ public class GameEngine(IUserInterface ui, IWorldLoader worldLoader)
 
   public void Start()
   {
-    ChangeState(new MainMenuState());
+    ChangeState(new MainMenuState(MainMenuUI));
     RunLoop();
   }
 

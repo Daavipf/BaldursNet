@@ -1,5 +1,6 @@
 using BaldursNet.Application.Interfaces;
 using BaldursNet.Application.Services;
+using BaldursNet.Presentation.ConsoleUI;
 
 namespace BaldursNet.State;
 
@@ -7,13 +8,13 @@ public class LoadMenuState : IGameState
 {
   public void Update(GameEngine engine)
   {
-    engine.UI.ShowMessage("Em desenvolvimento");
-    engine.ChangeState(new MainMenuState());
+    Console.WriteLine("Em desenvolvimento");
+    engine.ChangeState(new MainMenuState(new MainMenuUI()));
   }
 
   public void Render(GameEngine engine)
   {
-    engine.UI.ShowMessage("Em desenvolvimento");
-    engine.ChangeState(new MainMenuState());
+    Console.WriteLine("Em desenvolvimento");
+    engine.ChangeState(new MainMenuState(new MainMenuUI()));
   }
 }

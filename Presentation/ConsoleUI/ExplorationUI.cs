@@ -1,11 +1,24 @@
 using BaldursNet.Application.Interfaces;
+using BaldursNet.Application.Services;
+using BaldursNet.Domain.Entities;
+using BaldursNet.Presentation.UIComponents;
 
 namespace BaldursNet.Presentation.ConsoleUI;
 
-public class UserInterface : IUserInterface
+public class ExplorationUI : IUserInterface
 {
-  public int RenderScreen<T>(SelectionMenuParams<T> menuParams, List<string>? tabs)
+  public int RenderScreen<T>(GameEngine engine)
   {
+    var exits = engine.CurrentRoom.GetAvailableExits();
+
+    SelectionMenuParams<Room> menuParams = new(
+      items: exits,
+      title: engine.CurrentRoom.Name,
+      description: engine.CurrentRoom.Description,
+      displaySelector: exit => exit.Name,
+      prompt: "\n[↑/↓] Selecionar  |  [Enter] Entrar  |  [ESC] Voltar"
+    );
+
     if (menuParams.Items == null || menuParams.Items.Count == 0)
       return -1;
 
@@ -20,14 +33,7 @@ public class UserInterface : IUserInterface
       if (menuParams.Description != null)
         Console.WriteLine($"{menuParams.Description}");
 
-      if (tabs != null && tabs.Count > 0)
-      {
-        Console.WriteLine();
-        RenderTabs(tabs);
-        Console.WriteLine();
-      }
-
-      RenderSelectibleMenu(menuParams, selectedIndex);
+      SelectibleMenu.ShowMenu(menuParams, selectedIndex);
 
       int? selectedOption = CaptureInputKey(menuParams.Items.Count, menuParams.CanCancel, ref selectedIndex);
 
@@ -38,29 +44,17 @@ public class UserInterface : IUserInterface
     }
   }
 
+  public void ShowMessage(string message)
+  {
+    Console.WriteLine(message);
+    Console.ReadKey(true);
+    return;
+  }
+
   public void RenderTabs(List<string> tabs)
   {
     Console.WriteLine(string.Join(" | ", tabs));
     Console.WriteLine(new string('-', Console.WindowWidth > 0 ? Console.WindowWidth : 30));
-  }
-
-  public void RenderSelectibleMenu<T>(SelectionMenuParams<T> menuParams, int selectedIndex)
-  {
-    for (int i = 0; i < menuParams.Items.Count; i++)
-    {
-      if (i == selectedIndex)
-      {
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($" > {menuParams.DisplaySelector(menuParams.Items[i])}");
-        Console.ResetColor();
-      }
-      else
-      {
-        Console.WriteLine($"   {menuParams.DisplaySelector(menuParams.Items[i])}");
-      }
-    }
-
-    Console.WriteLine($"\n{menuParams.Prompt}");
   }
 
   private int? CaptureInputKey(int menuParamsItemsCount, bool menuParamsCanCancel, ref int selectedIndex)
@@ -85,12 +79,5 @@ public class UserInterface : IUserInterface
     }
 
     return null;
-  }
-
-  public void ShowMessage(string message)
-  {
-    Console.WriteLine(message);
-    Console.ReadKey(true);
-    return;
   }
 }

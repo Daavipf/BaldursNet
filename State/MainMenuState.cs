@@ -1,18 +1,23 @@
 using BaldursNet.Application.Interfaces;
 using BaldursNet.Application.Services;
-using BaldursNet.Presentation.ConsoleUI;
 
 namespace BaldursNet.State;
 
 public class MainMenuState : IGameState
 {
+  private readonly IUserInterface UI;
   private int SelectionMenuIndex;
+
+  public MainMenuState(IUserInterface ui)
+  {
+    UI = ui;
+  }
   public void Update(GameEngine engine)
   {
     switch (SelectionMenuIndex)
     {
       case 0:
-        engine.ChangeState(new ExplorationState());
+        engine.ChangeState(new ExplorationState(engine.ExplorationUI));
         break;
       case 1:
         engine.ChangeState(new LoadMenuState());
@@ -28,13 +33,6 @@ public class MainMenuState : IGameState
 
   public void Render(GameEngine engine)
   {
-    List<string> options = ["Iniciar Jogo", "Carregar Jogo", "Opções", "Sair"];
-    SelectionMenuParams<string> menuParams = new(
-      title: "BALDUR'S NET 10.0",
-      items: options,
-      canCancel: false
-    );
-
-    SelectionMenuIndex = engine.UI.RenderScreen<string>(menuParams, null);
+    SelectionMenuIndex = UI.RenderScreen<string>(engine);
   }
 }
