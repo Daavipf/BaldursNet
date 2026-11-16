@@ -1,0 +1,280 @@
+[
+  {
+    "Id": "tavern",
+    "Name": "Taverna do Javali",
+    "Description": "O calor da lareira traz conforto e o ar cheira a malte e fumaça de cachimbo. Um refúgio seguro antes de adentrar a noite fria.",
+    "Exits": [
+      {
+        "TargetRoomId": "street",
+        "DisplayName": "Porta de Carvalho para a Rua Principal",
+        "IsLocked": false
+      }
+    ],
+    "Npcs": [
+      {
+        "Id": "bartender",
+        "Name": "Garin, o Taverneiro",
+        "Description": "Um homem corpulento com braços fortes e sorriso acolhedor limpando canecas de cerveja.",
+        "Dialogue": [
+          "Seja bem-vindo ao Javali Empalhado, viajante!",
+          "As ruas lá fora não são seguras à noite. Bandidos e criaturas saíram dos esgotos e do velho cemitério.",
+          "Dizem que o ladrão do beco escondeu a chave da velha armaria.",
+          "Se precisar de suprimentos, dê uma olhada nas minhas mercadorias."
+        ],
+        "IsMerchant": true,
+        "MerchantStock": [
+          "potion_health_small",
+          "potion_mana_small",
+          "bread_ration",
+          "iron_sword"
+        ]
+      },
+      {
+        "Id": "drunk_patron",
+        "Name": "Torin, o Anão Bêbado",
+        "Description": "Um guerreiro anão cabisbaixo sobre a mesa com a caneca virada.",
+        "Dialogue": [
+          "*Soluço*... Não vá ao cemitério sem uma boa armadura...",
+          "Os mortos não descansam mais naquela cripta maldita... Malakor acordou...",
+          "Encontre equipamentos decentes primeiro ou será só mais um esqueleto."
+        ],
+        "IsMerchant": false
+      }
+    ],
+    "Containers": [
+      {
+        "Id": "tavern_chest",
+        "Name": "Baú de Viagem",
+        "Description": "Um baú reforçado aos pés de uma cama vazia.",
+        "Capacity": 25,
+        "IsLocked": false,
+        "Items": [
+          "leather_armor",
+          "potion_health_small",
+          "bread_ration"
+        ]
+      }
+    ],
+    "Items": [
+      "bread_ration"
+    ]
+  },
+  {
+    "Id": "street",
+    "Name": "Rua Principal",
+    "Description": "Uma rua de paralelepípedos úmidos sob a névoa noturna. Postes de ferro fundido piscam fracos ao vento.",
+    "Exits": [
+      {
+        "TargetRoomId": "tavern",
+        "DisplayName": "Porta de Carvalho da Taverna",
+        "IsLocked": false
+      },
+      {
+        "TargetRoomId": "alley",
+        "DisplayName": "Entrada do Beco Escuro",
+        "IsLocked": false
+      },
+      {
+        "TargetRoomId": "armory",
+        "DisplayName": "Portão de Ferro da Armaria",
+        "IsLocked": true,
+        "RequiredKeyId": "armory_key",
+        "LockedDescription": "O portão reforçado está trancado por um cadeado pesado de ferro. Requer a Chave de Ferro Antiga."
+      },
+      {
+        "TargetRoomId": "graveyard",
+        "DisplayName": "Portão de Grade do Cemitério Esquecido",
+        "IsLocked": false
+      }
+    ],
+    "Enemies": [
+      {
+        "EnemyId": "giant_rat"
+      }
+    ],
+    "Containers": [
+      {
+        "Id": "street_barrel",
+        "Name": "Barril de Madeira Quebrado",
+        "Description": "Um barril úmido encostado no canto de uma guarita deserta.",
+        "Capacity": 10,
+        "IsLocked": false,
+        "Items": [
+          "bread_ration"
+        ]
+      }
+    ],
+    "Items": [
+      "rusty_dagger"
+    ]
+  },
+  {
+    "Id": "alley",
+    "Name": "Beco das Sombras",
+    "Description": "Um beco estreito sem saída cercado por muros altos de pedra. Gotas de água pingam ritmicamente no chão lamacento.",
+    "Exits": [
+      {
+        "TargetRoomId": "street",
+        "DisplayName": "Retornar para a Rua Principal",
+        "IsLocked": false
+      }
+    ],
+    "Enemies": [
+      {
+        "EnemyId": "shadow_thief"
+      }
+    ],
+    "Containers": [
+      {
+        "Id": "thief_stash",
+        "Name": "Caixote de Saques",
+        "Description": "Um caixote de pinho onde o fora-da-lei escondia seus pertences roubados.",
+        "Capacity": 15,
+        "IsLocked": false,
+        "Items": [
+          "potion_mana_small",
+          "bread_ration"
+        ]
+      }
+    ]
+  },
+  {
+    "Id": "armory",
+    "Name": "Velha Armaria Abandonada",
+    "Description": "Pó e teias de aranha cobrem manequins de treino e estantes de carvalho maciço. O cheiro de metal e óleo ainda paira no ar.",
+    "Exits": [
+      {
+        "TargetRoomId": "street",
+        "DisplayName": "Portão de Ferro para a Rua",
+        "IsLocked": false
+      }
+    ],
+    "Containers": [
+      {
+        "Id": "weapon_rack",
+        "Name": "Armário de Armas Militares",
+        "Description": "Um armário pesado de ferro trancado por travas manuais.",
+        "Capacity": 35,
+        "IsLocked": false,
+        "Items": [
+          "iron_sword",
+          "iron_helmet",
+          "wooden_shield"
+        ]
+      },
+      {
+        "Id": "supply_chest",
+        "Name": "Baú de Primeiros Socorros",
+        "Description": "Pequena caixa metálica marcada com uma cruz vermelha apagada.",
+        "Capacity": 12,
+        "IsLocked": false,
+        "Items": [
+          "potion_health_greater",
+          "potion_mana_small"
+        ]
+      }
+    ]
+  },
+  {
+    "Id": "graveyard",
+    "Name": "Cemitério Esquecido",
+    "Description": "Lápides tortas emergem de uma relva alta e congelada. O ar é pesado e gélido, carregado de murmúrios sobrenaturais.",
+    "Exits": [
+      {
+        "TargetRoomId": "street",
+        "DisplayName": "Portão de Saída para a Rua",
+        "IsLocked": false
+      },
+      {
+        "TargetRoomId": "crypt",
+        "DisplayName": "Mausoléu da Cripta Ancestral",
+        "IsLocked": true,
+        "RequiredKeyId": "crypt_key",
+        "LockedDescription": "Uma enorme porta com entalhe de caveira lacrada por runas arcanas e uma fechadura escura. Requer a Chave da Cripta Esquecida."
+      }
+    ],
+    "Enemies": [
+      {
+        "EnemyId": "skeleton_warrior"
+      }
+    ],
+    "Containers": [
+      {
+        "Id": "grave_urn",
+        "Name": "Urna Funerária de Bronze",
+        "Description": "Urna antiga aos pés de uma lápide esquecida pelo tempo.",
+        "Capacity": 8,
+        "IsLocked": false,
+        "Items": [
+          "potion_mana_small"
+        ]
+      }
+    ]
+  },
+  {
+    "Id": "crypt",
+    "Name": "Cripta Ancestral",
+    "Description": "As paredes são feitas de rocha escura úmida. O eco de passos reverbera pelos corredores subterrâneos.",
+    "Exits": [
+      {
+        "TargetRoomId": "graveyard",
+        "DisplayName": "Escadaria de Pedra para o Cemitério",
+        "IsLocked": false
+      },
+      {
+        "TargetRoomId": "sanctum",
+        "DisplayName": "Arco Sombrio para o Santuário Oculto",
+        "IsLocked": false
+      }
+    ],
+    "Enemies": [
+      {
+        "EnemyId": "crypt_ghoul"
+      }
+    ],
+    "Containers": [
+      {
+        "Id": "stone_sarcophagus",
+        "Name": "Sarcófago de Pedra Lavrada",
+        "Description": "Tumba de um antigo guerreiro nobre sepultado com suas relíquias.",
+        "Capacity": 30,
+        "IsLocked": false,
+        "Items": [
+          "chainmail",
+          "potion_health_greater"
+        ]
+      }
+    ]
+  },
+  {
+    "Id": "sanctum",
+    "Name": "Santuário Oculto de Malakor",
+    "Description": "Um imenso salão circular iluminado por tochas de fogo violeta. No centro, sobre um altar de ossos, pulsa uma fenda abissal.",
+    "Exits": [
+      {
+        "TargetRoomId": "crypt",
+        "DisplayName": "Corredor Subterrâneo para a Cripta",
+        "IsLocked": false
+      }
+    ],
+    "Enemies": [
+      {
+        "EnemyId": "necromancer_lord"
+      }
+    ],
+    "Containers": [
+      {
+        "Id": "final_chest",
+        "Name": "Baú Ornamental do Arquimago",
+        "Description": "Um baú adornado com ouro e pedras preciosas contendo os maiores tesouros do santuário.",
+        "Capacity": 60,
+        "IsLocked": false,
+        "Items": [
+          "steel_broadsword",
+          "ruby_ring",
+          "golden_chalice"
+        ]
+      }
+    ]
+  }
+]

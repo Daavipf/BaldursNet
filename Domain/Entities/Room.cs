@@ -1,39 +1,65 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace BaldursNet.Domain.Entities;
 
-public class Room(string name, string description)
+public class Room
 {
-  public string Name { get; private set; } = name;
-  public string Description { get; private set; } = description;
-  public List<Room> Exits { get; } = [];
+  public string Id { get; set; } = string.Empty;
+  public string Name { get; set; } = string.Empty;
+  public string Description { get; set; } = string.Empty;
+  public List<RoomExit> Exits { get; } = [];
   public List<GameObject> Objects { get; } = [];
 
-  public void AddExit(Room room)
+  public Room(string id, string name, string description)
   {
-    Exits.Add(room);
+    Id = id;
+    Name = name;
+    Description = description;
   }
 
-  public Room GetExit(int index)
+  public Room(string name, string description) : this(string.Empty, name, description) { }
+
+  public void AddExit(RoomExit exit)
   {
-    return Exits[index];
+    Exits.Add(exit);
   }
 
-  public List<Room> GetAvailableExits()
+  public void AddExit(Room targetRoom, string? displayName = null)
   {
-    return Exits;
+    Exits.Add(new RoomExit
+    {
+      TargetRoomId = targetRoom.Id,
+      DisplayName = displayName ?? targetRoom.Name,
+      TargetRoom = targetRoom
+    });
   }
 
-  public List<T> GetGameObjects<T>()
+  public List<RoomExit> GetAvailableExits() => Exits;
+
+  public List<T> GetGameObjects<T>() where T : GameObject
   {
-    return [.. Objects.OfType<T>()];
+    return Objects.OfType<T>().Where(o => o.IsActive).ToList();
   }
+
+  public List<Enemy> GetAliveEnemies()
+  {
+    return GetGameObjects<Enemy>().Where(e => e.IsAlive).ToList();
+  }
+
+  public List<Npc> GetNpcs() => GetGameObjects<Npc>();
+
+  public List<Container> GetContainers() => GetGameObjects<Container>();
+
+  public List<WorldItem> GetWorldItems() => GetGameObjects<WorldItem>();
 
   public void AddObject(GameObject obj)
   {
     Objects.Add(obj);
   }
 
-  public List<GameObject> GetObjects()
+  public void RemoveObject(GameObject obj)
   {
-    return Objects;
+    Objects.Remove(obj);
   }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using BaldursNet.Application.Interfaces;
 using BaldursNet.Application.Services;
 using BaldursNet.Presentation.UIComponents;
@@ -8,32 +10,54 @@ public class MainMenuUI : IUserInterface
 {
   public (string? Tab, int Index)? RenderScreen(GameEngine engine)
   {
-    List<string> items = ["Iniciar Jogo", "Carregar Jogo", "Opções", "Sair"];
+    bool inGame = engine.CurrentRoom != null;
+    var items = inGame
+      ? new List<string> { "Continuar Aventura", "Guia & Mecânicas", "Reiniciar Novo Jogo", "Sair" }
+      : new List<string> { "Iniciar Nova Aventura", "Guia & Mecânicas", "Sobre o Jogo", "Sair" };
+
     SelectionMenuParams<string> menuParams = new(
-      title: "BALDUR'S NET 10.0",
+      title: "BALDUR'S NET - RPG DE TERMINAL",
       items: items,
-      canCancel: false
+      canCancel: false,
+      prompt: "\n[↑/↓] Selecionar  |  [Enter] Confirmar"
     );
 
-    if (menuParams.Items == null || menuParams.Items.Count == 0)
-      return (null, -1);
-
     int selectedIndex = 0;
-    menuParams.DisplaySelector ??= (item => item?.ToString() ?? string.Empty);
 
     while (true)
     {
       Console.Clear();
 
-      Console.WriteLine($"=== {menuParams.Title} ===");
+      Console.ForegroundColor = ConsoleColor.Cyan;
+      Console.WriteLine(@"
+  ____            _       _                 _   _      _   
+ |  _ \          | |     | |               | \ | |    | |  
+ | |_) | __ _  __| | _   | | _ __  ___     |  \| | ___| |_ 
+ |  _ < / _` |/ _` || | | | || '__/ __|    | . ` |/ _ \ __|
+ | |_) | (_| | (_| || |_| | || |  \__ \    | |\  |  __/ |_ 
+ |____/ \__,_|\__,_| \__,_|_||_|  |___/    |_| \_|\___|\__|
+                                                           ");
+      Console.ResetColor();
+
+      Console.ForegroundColor = ConsoleColor.DarkGray;
+      Console.WriteLine("    Um RPG Tático em Texto no Terminal com Grafo de Ambientes e Inventário\n");
+      Console.ResetColor();
 
       SelectibleMenu.ShowMenu(menuParams, selectedIndex);
 
-      int? selectedOption = CaptureInputKey(menuParams.Items.Count, menuParams.CanCancel, ref selectedIndex);
+      var key = Console.ReadKey(intercept: true).Key;
 
-      if (selectedOption.HasValue)
+      if (key == ConsoleKey.UpArrow)
       {
-        return (null, selectedOption.Value);
+        selectedIndex = (selectedIndex <= 0) ? items.Count - 1 : selectedIndex - 1;
+      }
+      else if (key == ConsoleKey.DownArrow)
+      {
+        selectedIndex = (selectedIndex >= items.Count - 1) ? 0 : selectedIndex + 1;
+      }
+      else if (key == ConsoleKey.Enter)
+      {
+        return (null, selectedIndex);
       }
     }
   }
@@ -41,31 +65,7 @@ public class MainMenuUI : IUserInterface
   public void ShowMessage(string message)
   {
     Console.WriteLine(message);
+    Console.WriteLine("\n[Pressione qualquer tecla para continuar]");
     Console.ReadKey(true);
-    return;
-  }
-
-  private int? CaptureInputKey(int menuParamsItemsCount, bool menuParamsCanCancel, ref int selectedIndex)
-  {
-    var key = Console.ReadKey(intercept: true).Key;
-
-    if (key == ConsoleKey.UpArrow)
-    {
-      selectedIndex = (selectedIndex == 0) ? menuParamsItemsCount - 1 : selectedIndex - 1;
-    }
-    else if (key == ConsoleKey.DownArrow)
-    {
-      selectedIndex = (selectedIndex == menuParamsItemsCount - 1) ? 0 : selectedIndex + 1;
-    }
-    else if (key == ConsoleKey.Enter)
-    {
-      return selectedIndex;
-    }
-    else if (menuParamsCanCancel && key == ConsoleKey.Escape)
-    {
-      return -1;
-    }
-
-    return null;
   }
 }

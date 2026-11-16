@@ -1,20 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BaldursNet.Application.Interfaces;
 using BaldursNet.Application.Services;
-using BaldursNet.Domain.Entities;
 using BaldursNet.Presentation.UIComponents;
 
 namespace BaldursNet.Presentation.ConsoleUI;
 
 public class ExplorationUI : IUserInterface
 {
-  public (string Tab, int Index)? RenderScreen(GameEngine engine)
+  public (string? Tab, int Index)? RenderScreen(GameEngine engine)
   {
-    var exits = engine.CurrentRoom.GetAvailableExits();
-
-    var tabs = ItemTabs.InitializeTabs(exits, engine.CurrentRoom.Objects);
+    var tabs = RoomTabs.InitializeTabs(engine.CurrentRoom, engine.Player);
 
     int currentTabIndex = 0;
     int selectedIndex = 0;
@@ -23,17 +19,33 @@ public class ExplorationUI : IUserInterface
     {
       Console.Clear();
 
+      // Barra de status superior do herói
+      RenderHeroStatusBar(engine);
+
+      // Cabeçalho da sala
+      Console.ForegroundColor = ConsoleColor.Cyan;
+      Console.WriteLine($"\n=== {engine.CurrentRoom.Name.ToUpper()} ===");
+      Console.ResetColor();
+
+      if (!string.IsNullOrEmpty(engine.CurrentRoom.Description))
+      {
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.WriteLine($"{engine.CurrentRoom.Description}");
+        Console.ResetColor();
+      }
+
+      // Abas
+      if (currentTabIndex >= tabs.Count) currentTabIndex = 0;
       var currentTab = tabs[currentTabIndex];
 
-      Console.WriteLine($"=== {engine.CurrentRoom.Name} ===");
-      if (!string.IsNullOrEmpty(engine.CurrentRoom.Description))
-        Console.WriteLine($"{engine.CurrentRoom.Description}\n");
+      RoomTabs.RenderTabs(tabs, currentTabIndex);
 
-      ItemTabs.RenderTabs(tabs, currentTabIndex);
-
+      // Conteúdo da aba selecionada
       if (currentTab.Items.Count == 0)
       {
-        Console.WriteLine("\n[Vazio]");
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine("\n  [Vazio - Não há nada nesta seção]\n");
+        Console.ResetColor();
       }
       else
       {
@@ -42,17 +54,26 @@ public class ExplorationUI : IUserInterface
           title: currentTab.Title,
           description: null,
           displaySelector: currentTab.DisplaySelector,
-          prompt: "\n[←/→] Mudar Aba  |  [↑/↓] Selecionar  |  [Enter] Interagir  |  [ESC] Voltar"
+          prompt: "\n[←/→] Mudar Aba  |  [↑/↓] Selecionar  |  [Enter] Interagir  |  [I] Mochila  |  [ESC] Menu"
         );
 
         SelectibleMenu.ShowMenu(menuParams, selectedIndex);
       }
 
+      // Log de mensagens recentes
+      RenderMessageLog(engine);
+
+      // Captura de entrada
       var key = CaptureInputKey(currentTab.Items.Count, ref selectedIndex, ref currentTabIndex, tabs.Count);
 
       if (key == ConsoleKey.Enter && currentTab.Items.Count > 0)
       {
         return (currentTab.Title, selectedIndex);
+      }
+      else if (key == ConsoleKey.I)
+      {
+        // Atalho para abrir inventário
+        return ("Herói & Mochila", 0);
       }
       else if (key == ConsoleKey.Escape)
       {
@@ -61,9 +82,65 @@ public class ExplorationUI : IUserInterface
     }
   }
 
+  private static void RenderHeroStatusBar(GameEngine engine)
+  {
+    var p = engine.Player;
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.WriteLine(new string('═', 78));
+    Console.ResetColor();
+
+    Console.Write(" HERÓI: ");
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.Write($"{p.Name} (Nv. {p.Level})");
+    Console.ResetColor();
+
+    Console.Write("  |  PV: ");
+    Console.ForegroundColor = p.CurrentHp > p.TotalMaxHp * 0.3 ? ConsoleColor.Green : ConsoleColor.Red;
+    Console.Write($"{p.CurrentHp}/{p.TotalMaxHp}");
+    Console.ResetColor();
+
+    Console.Write("  |  PM: ");
+    Console.ForegroundColor = ConsoleColor.Blue;
+    Console.Write($"{p.CurrentMp}/{p.TotalMaxMp}");
+    Console.ResetColor();
+
+    Console.Write("  |  OURO: ");
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.Write($"{p.Gold} 🪙");
+    Console.ResetColor();
+
+    Console.Write("  |  CARGA: ");
+    Console.ForegroundColor = p.Inventory.IsFull ? ConsoleColor.Red : ConsoleColor.White;
+    Console.Write($"{p.Inventory.CurrentWeight}/{p.Inventory.MaxWeight} kg");
+    Console.ResetColor();
+
+    Console.WriteLine();
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.WriteLine(new string('═', 78));
+    Console.ResetColor();
+  }
+
+  private static void RenderMessageLog(GameEngine engine)
+  {
+    if (engine.MessageLog.Count == 0) return;
+
+    Console.WriteLine();
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.WriteLine("── Diário de Ações ──");
+    Console.ResetColor();
+
+    foreach (var msg in engine.MessageLog)
+    {
+      Console.ForegroundColor = ConsoleColor.Yellow;
+      Console.WriteLine($" * {msg}");
+      Console.ResetColor();
+    }
+  }
+
   public void ShowMessage(string message)
   {
     Console.WriteLine(message);
+    Console.WriteLine("\n[Pressione qualquer tecla para continuar]");
     Console.ReadKey(true);
   }
 

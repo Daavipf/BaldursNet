@@ -1,0 +1,175 @@
+[
+  {
+    "Id": "rusty_dagger",
+    "Name": "Adaga Enferrujada",
+    "Description": "Uma lâmina velha com ponta irregular, mas ainda perfura.",
+    "Type": "Weapon",
+    "Rarity": "Common",
+    "Weight": 1,
+    "Value": 8,
+    "AttackBonus": 3,
+    "TargetSlot": "Weapon"
+  },
+  {
+    "Id": "iron_sword",
+    "Name": "Espada de Ferro",
+    "Description": "Uma espada forjada por ferreiros da guilda. Equilibrada e cortante.",
+    "Type": "Weapon",
+    "Rarity": "Common",
+    "Weight": 3,
+    "Value": 35,
+    "AttackBonus": 7,
+    "TargetSlot": "Weapon"
+  },
+  {
+    "Id": "steel_broadsword",
+    "Name": "Montante de Aço",
+    "Description": "Uma lâmina robusta que causa ferimentos devastadores em combate.",
+    "Type": "Weapon",
+    "Rarity": "Uncommon",
+    "Weight": 5,
+    "Value": 90,
+    "AttackBonus": 14,
+    "TargetSlot": "Weapon"
+  },
+  {
+    "Id": "apprentice_staff",
+    "Name": "Cajado do Aprendiz",
+    "Description": "Cajado talhado em madeira de freixo, canaliza energias arcanas.",
+    "Type": "Weapon",
+    "Rarity": "Common",
+    "Weight": 2,
+    "Value": 40,
+    "AttackBonus": 5,
+    "MpBonus": 15,
+    "TargetSlot": "Weapon"
+  },
+  {
+    "Id": "leather_armor",
+    "Name": "Armadura de Couro Curtido",
+    "Description": "Colete de couro resistente que protege o tronco sem tirar agilidade.",
+    "Type": "Armor",
+    "Rarity": "Common",
+    "Weight": 3,
+    "Value": 25,
+    "DefenseBonus": 4,
+    "TargetSlot": "Armor"
+  },
+  {
+    "Id": "chainmail",
+    "Name": "Cota de Malha Pesada",
+    "Description": "Anéis de ferro entrelaçados. Excelente proteção contra cortes de espada.",
+    "Type": "Armor",
+    "Rarity": "Uncommon",
+    "Weight": 7,
+    "Value": 85,
+    "DefenseBonus": 9,
+    "TargetSlot": "Armor"
+  },
+  {
+    "Id": "wooden_shield",
+    "Name": "Escudo Redondo de Madeira",
+    "Description": "Escudo de madeira reforçado com aros de ferro batido.",
+    "Type": "Shield",
+    "Rarity": "Common",
+    "Weight": 3,
+    "Value": 20,
+    "DefenseBonus": 3,
+    "TargetSlot": "Shield"
+  },
+  {
+    "Id": "iron_helmet",
+    "Name": "Elmo Cônico de Ferro",
+    "Description": "Proteção confiável para o crânio em duelos ferozes.",
+    "Type": "Helmet",
+    "Rarity": "Common",
+    "Weight": 2,
+    "Value": 25,
+    "DefenseBonus": 2,
+    "TargetSlot": "Helmet"
+  },
+  {
+    "Id": "ruby_ring",
+    "Name": "Anel da Vitalidade",
+    "Description": "Um anel com uma pedra rubi incrustada que pulsa calor e vigor.",
+    "Type": "Accessory",
+    "Rarity": "Rare",
+    "Weight": 1,
+    "Value": 120,
+    "HpBonus": 25,
+    "TargetSlot": "Accessory"
+  },
+  {
+    "Id": "potion_health_small",
+    "Name": "Poção de Vida Menor",
+    "Description": "Um frasco com líquido carmesim espesso. Restaura 30 PV.",
+    "Type": "Consumable",
+    "Rarity": "Common",
+    "Weight": 1,
+    "Value": 15,
+    "HealAmount": 30,
+    "TargetSlot": "QuickSlot1"
+  },
+  {
+    "Id": "potion_health_greater",
+    "Name": "Grande Poção de Cura",
+    "Description": "Extrato concentrado de ervas medicinais. Restaura 70 PV.",
+    "Type": "Consumable",
+    "Rarity": "Uncommon",
+    "Weight": 1,
+    "Value": 45,
+    "HealAmount": 70,
+    "TargetSlot": "QuickSlot1"
+  },
+  {
+    "Id": "potion_mana_small",
+    "Name": "Frasco de Mana",
+    "Description": "Elixir azul brilhante destilado de flores da meia-noite. Restaura 25 PM.",
+    "Type": "Consumable",
+    "Rarity": "Common",
+    "Weight": 1,
+    "Value": 18,
+    "ManaAmount": 25,
+    "TargetSlot": "QuickSlot2"
+  },
+  {
+    "Id": "bread_ration",
+    "Name": "Pão de Viagem e Queijo",
+    "Description": "Alimento simples mas revigorante. Restaura 15 PV.",
+    "Type": "Consumable",
+    "Rarity": "Common",
+    "Weight": 1,
+    "Value": 5,
+    "HealAmount": 15,
+    "TargetSlot": "QuickSlot1"
+  },
+  {
+    "Id": "rusty_key",
+    "Name": "Chave de Ferro Antiga",
+    "Description": "Uma chave enferrujada que parece abrir a porta da armaria abandonada.",
+    "Type": "Key",
+    "Rarity": "Common",
+    "Weight": 1,
+    "Value": 0,
+    "KeyId": "armory_key"
+  },
+  {
+    "Id": "crypt_key",
+    "Name": "Chave da Cripta Esquecida",
+    "Description": "Feita de ferro fundido com entalhe em formato de caveira.",
+    "Type": "Key",
+    "Rarity": "Rare",
+    "Weight": 1,
+    "Value": 0,
+    "KeyId": "crypt_key"
+  },
+  {
+    "Id": "golden_chalice",
+    "Name": "Cálice de Ouro Antigo",
+    "Description": "Relíquia dourada incrustada com safiras. Vale uma fortuna com colecionadores.",
+    "Type": "Treasure",
+    "Rarity": "Rare",
+    "Weight": 2,
+    "Value": 150
+  }
+]

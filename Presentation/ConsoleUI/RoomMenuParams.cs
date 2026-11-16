@@ -6,7 +6,7 @@ namespace BaldursNet.Presentation.ConsoleUI;
 
 public class RoomMenuParams
 {
-  public RoomDto Room { get; set; }
+  public Room? Room { get; set; }
   public ExplorationTab ActiveTab { get; set; }
-  public SelectionMenuParams<Room> TabContentMenu { get; set; }
+  public SelectionMenuParams<object>? TabContentMenu { get; set; }
 }

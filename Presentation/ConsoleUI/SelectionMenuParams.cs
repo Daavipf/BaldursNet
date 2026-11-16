@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace BaldursNet.Presentation.ConsoleUI;
 
 public class SelectionMenuParams<T>(
@@ -6,7 +9,7 @@ public class SelectionMenuParams<T>(
   string? description = null,
   Func<T, string>? displaySelector = null,
   bool canCancel = true,
-  string prompt = "\n[↑/↓] Alternar  |  [Enter] Selecionar")
+  string prompt = "\n[↑/↓] Navegar  |  [Enter] Selecionar  |  [ESC] Voltar")
 {
   public List<T> Items { get; } = items;
   public string Title { get; } = title;

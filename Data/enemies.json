@@ -1,0 +1,105 @@
+[
+  {
+    "Id": "giant_rat",
+    "Name": "Ratazana Carniceira",
+    "Description": "Um roedor gigante de olhos avermelhados com dentes afiados cobertos de imundície.",
+    "EnemyType": "Besta",
+    "Level": 1,
+    "MaxHp": 28,
+    "MaxMp": 10,
+    "BaseAttack": 5,
+    "BaseDefense": 1,
+    "XpReward": 25,
+    "GoldReward": 6,
+    "LootDrops": [
+      { "ItemId": "bread_ration", "DropChance": 0.5 }
+    ],
+    "Skills": [
+      { "Id": "bite", "Name": "Mordida Feroz", "Description": "Ataque rápido com dentes afiados", "ManaCost": 0, "Power": 6, "IsHealing": false }
+    ]
+  },
+  {
+    "Id": "shadow_thief",
+    "Name": "Ladrão do Beco Sombrio",
+    "Description": "Um fora-da-lei encapuzado empunhando adagas com veneno na lâmina.",
+    "EnemyType": "Humanoide",
+    "Level": 2,
+    "MaxHp": 45,
+    "MaxMp": 20,
+    "BaseAttack": 8,
+    "BaseDefense": 3,
+    "XpReward": 55,
+    "GoldReward": 25,
+    "LootDrops": [
+      { "ItemId": "rusty_dagger", "DropChance": 0.4 },
+      { "ItemId": "potion_health_small", "DropChance": 0.35 },
+      { "ItemId": "rusty_key", "DropChance": 1.0 }
+    ],
+    "Skills": [
+      { "Id": "backstab", "Name": "Golpe pelas Costas", "Description": "Ataque furtivo que causa dano perfurante elevado", "ManaCost": 5, "Power": 12, "IsHealing": false }
+    ]
+  },
+  {
+    "Id": "skeleton_warrior",
+    "Name": "Guerreiro Esqueleto",
+    "Description": "Ossos animados por necromancia antiga, empunhando espada rachada e escudo.",
+    "EnemyType": "Morto-Vivo",
+    "Level": 3,
+    "MaxHp": 65,
+    "MaxMp": 15,
+    "BaseAttack": 12,
+    "BaseDefense": 6,
+    "XpReward": 90,
+    "GoldReward": 35,
+    "LootDrops": [
+      { "ItemId": "iron_sword", "DropChance": 0.3 },
+      { "ItemId": "wooden_shield", "DropChance": 0.35 },
+      { "ItemId": "crypt_key", "DropChance": 1.0 }
+    ],
+    "Skills": [
+      { "Id": "cleave", "Name": "Corte Sepulcral", "Description": "Golpe pesado com a lâmina enferrujada", "ManaCost": 4, "Power": 15, "IsHealing": false }
+    ]
+  },
+  {
+    "Id": "crypt_ghoul",
+    "Name": "Carniçal Devorador",
+    "Description": "Uma criatura cadavérica esfomeada com garras longas e olhar enlouquecido.",
+    "EnemyType": "Morto-Vivo",
+    "Level": 4,
+    "MaxHp": 80,
+    "MaxMp": 25,
+    "BaseAttack": 14,
+    "BaseDefense": 5,
+    "XpReward": 120,
+    "GoldReward": 45,
+    "LootDrops": [
+      { "ItemId": "potion_health_greater", "DropChance": 0.4 },
+      { "ItemId": "potion_mana_small", "DropChance": 0.4 }
+    ],
+    "Skills": [
+      { "Id": "frenzy", "Name": "Garras Frenéticas", "Description": "Sequência violenta de arranhões", "ManaCost": 6, "Power": 18, "IsHealing": false }
+    ]
+  },
+  {
+    "Id": "necromancer_lord",
+    "Name": "Malakor, o Mago Sombrio",
+    "Description": "O arquimago renegado que profanou a cripta. Seus olhos emitem uma chama espectral.",
+    "EnemyType": "Chefe",
+    "Level": 5,
+    "MaxHp": 140,
+    "MaxMp": 60,
+    "BaseAttack": 16,
+    "BaseDefense": 7,
+    "XpReward": 250,
+    "GoldReward": 120,
+    "LootDrops": [
+      { "ItemId": "steel_broadsword", "DropChance": 1.0 },
+      { "ItemId": "ruby_ring", "DropChance": 1.0 },
+      { "ItemId": "golden_chalice", "DropChance": 1.0 }
+    ],
+    "Skills": [
+      { "Id": "shadow_bolt", "Name": "Projétil das Sombras", "Description": "Esfera concentrada de energia necromântica", "ManaCost": 10, "Power": 22, "IsHealing": false },
+      { "Id": "drain_life", "Name": "Dreno de Almas", "Description": "Drena a vitalidade do alvo para se curar", "ManaCost": 15, "Power": 16, "IsHealing": false }
+    ]
+  }
+]
